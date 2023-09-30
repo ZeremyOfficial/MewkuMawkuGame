@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fdcd6e17f6b371b49bb057435ec93bcd
+guid: a2c921e67f2490846b027ad6ec01ab8b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -105,169 +105,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: kasvit_0
+      name: character_standin_back_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 64
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5104127, y: 0.5574386}
+        x: 38
+        y: 185
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: af758bc76e6e87d4f9b903eeeb7c1c40
-      internalID: 2109200161
+      spriteID: 18e8cb66f2cbefb44a543bc76ada3ced
+      internalID: 432427040
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: kasvit_1
+      name: character_standin_back_1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5103922, y: 0.577868}
+        x: 134
+        y: 185
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: be64c963f01377e4c9d19fdb722ad64d
-      internalID: 1298236523
+      spriteID: a77b0f24ca12ab041962c15b9e0f793c
+      internalID: -1843538238
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: kasvit_2
+      name: character_standin_back_2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 64
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.4625988, y: 0.5722017}
+        x: 38
+        y: 57
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 168f5db7fc6bf784fa9e7f43153c59cb
-      internalID: 1492367936
+      spriteID: 91f475b22646ee34694cfd73f0ce3277
+      internalID: -183476218
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: kasvit_3
+      name: character_standin_back_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.44560558, y: 0.5620184}
+        x: 134
+        y: 57
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b83862bb6d849e94f852738d4452eb0d
-      internalID: 450329158
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kasvit_4
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.53125, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 01a27639bcbfd6d4bafc7c034b9a9ba3
-      internalID: -2053426864
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kasvit_5
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.42192793, y: 0.21147335}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5d333f0f55ef5504ab79bfc33130b04a
-      internalID: -375484123
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kasvit_6
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5203665, y: 0.36082825}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 02634fcb6282e3f489dc1a4e699d2c37
-      internalID: 1540381128
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kasvit_7
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.27936184}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 12effd81ab584f74fba40ca59e2e9540
-      internalID: 383005549
+      spriteID: d818859b15149a342ae7310840765716
+      internalID: 1613156086
       vertices: []
       indices: 
       edges: []
@@ -283,14 +199,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      kasvit_0: 2109200161
-      kasvit_1: 1298236523
-      kasvit_2: 1492367936
-      kasvit_3: 450329158
-      kasvit_4: -2053426864
-      kasvit_5: -375484123
-      kasvit_6: 1540381128
-      kasvit_7: 383005549
+      character_standin_back_0: 432427040
+      character_standin_back_1: -1843538238
+      character_standin_back_2: -183476218
+      character_standin_back_3: 1613156086
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
