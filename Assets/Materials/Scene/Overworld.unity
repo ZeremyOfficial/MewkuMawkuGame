@@ -17073,7 +17073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ba7a6da8aa7de48b464e0277c0dead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
+  speed: 0.7
 --- !u!61 &1130955496
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -19233,7 +19233,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2091997404}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6e60f4e54e4629840984ed5e98aae9d4, type: 3}
