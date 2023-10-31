@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -8,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
     private Animator myAnim;
     private bool isAttacking = false;
     private bool isCooldown = false; // Added a flag for cooldown
-    private float attackCooldown = 1f; // Adjust this value as needed
+  //  private float attackCooldown = 1f; // Adjust this value as needed
     private float attackCooldownTimer = 0f;
     private float attackDuration = 0.5f; // Adjust this value as needed
     private float attackDurationTimer = 0f;
