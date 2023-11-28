@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 4202411786919615536}
   - component: {fileID: 3329174775620600271}
   - component: {fileID: 2575172354213213257}
+  - component: {fileID: 1940497788114074690}
   - component: {fileID: 6156988984396970872}
   - component: {fileID: 6156988984396970879}
-  - component: {fileID: 2957178743912888310}
   m_Layer: 0
   m_Name: Skelly
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,6 +83,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.15, y: 0.15}
   m_EdgeRadius: 0
+--- !u!114 &1940497788114074690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6156988984396970878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fcef05d260a1d49915cd7b1044b476, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 8197517755168939876, guid: 3810f4a19a7e7b14a895651682b33fb2, type: 3}
+  moveSpeed: 5000
+  smoothTime: 0
 --- !u!95 &6156988984396970872
 Animator:
   serializedVersion: 5
@@ -156,17 +171,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2957178743912888310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6156988984396970878}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7fcef05d260a1d49915cd7b1044b476, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  moveSpeed: 3

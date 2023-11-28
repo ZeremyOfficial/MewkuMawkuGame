@@ -2,22 +2,25 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public Transform player; // Player's transform
-    public float moveSpeed = 3.0f; // Speed at which the enemy moves
+    public Transform target; // Reference to the player character
+    public float moveSpeed = 2.0f;
+    public float smoothTime = 0.1f; // Adjust this value to control smoothing
 
-    private void Update()
-    {
-        // Move towards the player
-        MoveTowardsPlayer();
-    }
+    private Vector3 currentVelocity = Vector3.zero;
 
-    private void MoveTowardsPlayer()
+    void Update()
     {
-        if (player != null)
+        if (target != null)
         {
-            // Calculate the direction to the player and move towards them
-            Vector3 direction = (player.position - transform.position).normalized;
-            transform.position = Vector3.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
+            Vector3 direction = (target.position - transform.position).normalized;
+            Vector3 targetPosition = target.position;
+
+            // Calculate the new position towards the target with smoothing
+            float step = moveSpeed * Time.deltaTime;
+            Vector3 newPosition = Vector3.SmoothDamp(transform.position, targetPosition, ref currentVelocity, smoothTime, step);
+
+            // Update the enemy's position
+            transform.position = newPosition;
         }
     }
 }
