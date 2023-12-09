@@ -17,7 +17,14 @@ public class PlayerMovement : MonoBehaviour
     public PlayerSwordController swordController;
 
     [SerializeField]
-    private float speed;
+    private float speed = 1f; // The default speed of your player
+
+    // Public properties to get and set the speed safely
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
 
     void Start()
     {

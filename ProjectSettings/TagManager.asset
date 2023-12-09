@@ -5,17 +5,18 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - PlayerHitbox
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Damage
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Sword
+  - Enemy
+  - Playerhitbox
   - 
   - 
   - 
