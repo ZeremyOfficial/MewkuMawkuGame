@@ -7,11 +7,14 @@ public class PlayerMovement : MonoBehaviour
     private bool isAttacking = false;
     private float attackDuration = 0.5f;
     private float attackDurationTimer = 0f;
-    private float attackSpeedMultiplier = 0.3f; 
-    private float originalSpeed; 
+    private float attackSpeedMultiplier = 0.3f;
+    private float originalSpeed;
 
-    public GameObject fireballPrefab; // Assign this in the Inspector
-    public bool fireballUnlocked = true; // Initially false, can be unlocked in-game
+    public GameObject fireballPrefab;
+    public bool fireballUnlocked = false; // Set this to false initially if the fireball needs to be unlocked in-game
+    public float fireballCooldown = 2f;
+    private float fireballCooldownTimer = 0f;
+    public PlayerSwordController swordController;
 
     [SerializeField]
     private float speed;
@@ -27,7 +30,23 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleMovementInput();
         HandleAttackInput();
-        HandleFireballInput(); // Handling the fireball input
+        HandleFireballInput();
+
+        if (fireballCooldownTimer > 0)
+        {
+            fireballCooldownTimer -= Time.deltaTime;
+        }
+
+        if (isAttacking && attackDurationTimer > 0)
+        {
+            attackDurationTimer -= Time.deltaTime;
+        }
+        else if (isAttacking)
+        {
+            isAttacking = false;
+            speed = originalSpeed;
+            swordController.DisableSwordAttack(); // Make sure to disable the sword hitbox after attacking
+        }
     }
 
     void HandleMovementInput()
@@ -36,9 +55,7 @@ public class PlayerMovement : MonoBehaviour
         float verticalInput = Input.GetAxisRaw("Vertical");
 
         Vector2 inputVector = new Vector2(horizontalInput, verticalInput).normalized;
-
         myRB.velocity = inputVector * (isAttacking ? speed * attackSpeedMultiplier : speed);
-
         myAnim.SetFloat("moveX", inputVector.x);
         myAnim.SetFloat("moveY", inputVector.y);
 
@@ -51,56 +68,39 @@ public class PlayerMovement : MonoBehaviour
 
     void HandleAttackInput()
     {
-        if (isAttacking && attackDurationTimer > 0)
-        {
-            attackDurationTimer -= Time.deltaTime;
-        }
-
-        if (Input.GetMouseButtonDown(0) && !isAttacking) // Right mouse button for regular attack
+        if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
             Vector2 attackDirection = GetAttackDirection();
+            string direction;
 
-            // Attack animation logic
+            // Determine the direction of the attack and play the corresponding animation
             if (Mathf.Abs(attackDirection.x) > Mathf.Abs(attackDirection.y))
             {
-                if (attackDirection.x > 0)
-                {
-                    myAnim.Play("AttackRight", -1, 0f);
-                }
-                else
-                {
-                    myAnim.Play("AttackLeft", -1, 0f);
-                }
+                direction = attackDirection.x > 0 ? "Right" : "Left";
             }
             else
             {
-                if (attackDirection.y > 0)
-                {
-                    myAnim.Play("AttackUp", -1, 0f);
-                }
-                else
-                {
-                    myAnim.Play("AttackDown", -1, 0f);
-                }
+                direction = attackDirection.y > 0 ? "Up" : "Down";
             }
+
+            // Play the attack animation based on direction
+            myAnim.Play("Attack" + direction, -1, 0f);
+
+            // Enable the sword attack with the direction
+            swordController.EnableSwordAttack(direction);
 
             isAttacking = true;
             attackDurationTimer = attackDuration;
-            speed *= attackSpeedMultiplier;
-        }
-
-        if (isAttacking && attackDurationTimer <= 0)
-        {
-            isAttacking = false;
-            speed = originalSpeed;
+            speed *= attackSpeedMultiplier; 
         }
     }
 
     void HandleFireballInput()
     {
-        if (fireballUnlocked && Input.GetMouseButtonDown(1)) // Middle mouse button for fireball
+        if (fireballUnlocked && fireballCooldownTimer <= 0 && Input.GetMouseButtonDown(1))
         {
             LaunchFireballTowardsCursor();
+            fireballCooldownTimer = fireballCooldown;
         }
     }
 
@@ -112,29 +112,23 @@ public class PlayerMovement : MonoBehaviour
         mouseWorldPosition.z = 0;
 
         Vector2 fireballDirection = (mouseWorldPosition - transform.position).normalized;
+        float offsetDistance = 0.1f;
+        Vector2 spawnPosition = (Vector2)transform.position + fireballDirection * offsetDistance;
 
-        // Calculate the spawn offset
-        float offsetDistance = 0.1f; // Adjust this value as needed
-        Vector2 spawnPosition = transform.position + (Vector3)(fireballDirection * offsetDistance);
-
-        // Instantiate the fireball at the offset position
         GameObject fireball = Instantiate(fireballPrefab, spawnPosition, Quaternion.identity);
+        fireball.GetComponent<Rigidbody2D>().velocity = fireballDirection * 1.2f;
 
-        // Set the fireball's velocity
-        fireball.GetComponent<Rigidbody2D>().velocity = fireballDirection * 1.2f; // Adjust the speed as needed
-
-        Destroy(fireball, 5f); // Fireball disappears after 5 seconds
+        Destroy(fireball, 5f);
     }
-
-
-
-
-
 
     Vector2 GetAttackDirection()
     {
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 attackDirection = mouseWorldPosition - transform.position;
-        return attackDirection.normalized;
+        return (mouseWorldPosition - transform.position).normalized;
+    }
+
+    public void UpgradeFireballCooldown(float amount)
+    {
+        fireballCooldown = Mathf.Max(0, fireballCooldown - amount);
     }
 }
