@@ -3,13 +3,11 @@ using TMPro;
 
 public class ScoreScript : MonoBehaviour
 {
-    private int score; // Score for the current run
+    private int perRunScore; // Score for the current run
     private int totalScore; // Total accumulated score
     private float survivalTime = 0; // Initialize survivalTime to zero
-    public TextMeshProUGUI scoreText; // Reference to the Timer TMP UI Text
+    public TextMeshProUGUI perRunScoreText; // Reference to the per-run score text
     public TextMeshProUGUI totalScoreText; // Reference to the total score text
-
-    private bool isNewGameSession = true; // Flag to track if it's a new game session
 
     void Awake()
     {
@@ -19,16 +17,13 @@ public class ScoreScript : MonoBehaviour
 
     void Start()
     {
-        if (isNewGameSession)
-        {
-            // Reset the score for the current run to 0 every time a new game session starts
-            ResetGameScore();
-        }
+        // Reset the per-run score to 0 every time a new game starts
+        ResetPerRunScore();
     }
 
     void Update()
     {
-        // Regularly update the score during the game
+        // Regularly update the per-run score during the game
         survivalTime += Time.deltaTime;
         if (survivalTime >= 30f)
         {
@@ -37,11 +32,11 @@ public class ScoreScript : MonoBehaviour
         }
     }
 
-    private void UpdateScoreText()
+    private void UpdatePerRunScoreText()
     {
-        // Update the displayed score text during the game
-        if (scoreText != null)
-            scoreText.text = "Score: " + score;
+        // Update the displayed per-run score text during the game
+        if (perRunScoreText != null)
+            perRunScoreText.text = "Score: " + perRunScore;
     }
 
     private void UpdateTotalScoreText()
@@ -53,16 +48,24 @@ public class ScoreScript : MonoBehaviour
 
     public void AddPoints(int points)
     {
-        // Increase the score for the current run
-        score += points;
-        UpdateScoreText();
+        // Increase the per-run score
+        perRunScore += points;
+        UpdatePerRunScoreText();
 
         // Update the total score immediately
         totalScore += points;
         UpdateTotalScoreText();
+
+        // Save the updated total score
+        SaveTotalScore();
     }
 
-    // Remove SaveScore method
+    public void SaveTotalScore()
+    {
+        // Save the total accumulated score to PlayerPrefs
+        PlayerPrefs.SetInt("PlayerScore", totalScore);
+        PlayerPrefs.Save();
+    }
 
     public void LoadTotalScore()
     {
@@ -71,14 +74,12 @@ public class ScoreScript : MonoBehaviour
         UpdateTotalScoreText();
     }
 
-    // Keep GetTotalScore as it is
-
-    public void ResetGameScore()
+    public void ResetPerRunScore()
     {
-        // Reset the score for the current run to zero
-        score = 0;
+        // Reset the per-run score to zero
+        perRunScore = 0;
         survivalTime = 0; // Also reset survival time to avoid immediate point increase
-        UpdateScoreText();
+        UpdatePerRunScoreText();
     }
 
     public bool SpendScore(int amount)
@@ -95,13 +96,6 @@ public class ScoreScript : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    public void ResetDisplayedScore()
-    {
-        // Reset the displayed score to zero when starting a new game session
-        ResetGameScore();
-        isNewGameSession = false; // Clear the flag to indicate the continuation of the current session
     }
 
     public int GetTotalScore()
