@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     private float attackDuration = 0.5f;
     private float attackDurationTimer = 0f;
     private float attackSpeedMultiplier = 0.3f;
-    private float originalSpeed;
+    public float originalSpeed;
 
     public GameObject fireballPrefab;
     public bool fireballUnlocked = false; // Set this to false initially if the fireball needs to be unlocked in-game

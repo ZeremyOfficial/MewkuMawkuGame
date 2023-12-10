@@ -25,6 +25,8 @@ public class EnemySpawner : MonoBehaviour
     // Additional variables for validity check
     public float spawnRadius = 1.0f; // Radius to check for spawn validity
 
+    private bool canSpawn = true; // Control flag for spawning new enemies
+
     void Start()
     {
         currentEnemyCount = initialEnemyCount;
@@ -33,14 +35,17 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        timer += Time.deltaTime;
-
-        if (timer >= spawnInterval)
+        if (canSpawn)
         {
-            SpawnEnemies(currentEnemyCount);
-            timer = 0f;
-            IncreaseEnemyCount();
-            IncreaseMoveSpeed();
+            timer += Time.deltaTime;
+
+            if (timer >= spawnInterval)
+            {
+                SpawnEnemies(currentEnemyCount);
+                timer = 0f;
+                IncreaseEnemyCount();
+                IncreaseMoveSpeed();
+            }
         }
     }
 
@@ -78,5 +83,11 @@ public class EnemySpawner : MonoBehaviour
     void IncreaseMoveSpeed()
     {
         currentMoveSpeed = Mathf.Min(maxMoveSpeed, currentMoveSpeed * moveSpeedIncreaseRate);
+    }
+
+    // Public method to control the spawning process
+    public void ToggleSpawning(bool status)
+    {
+        canSpawn = status;
     }
 }

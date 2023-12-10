@@ -121,7 +121,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.4
+  - time: 0.275
     functionName: DisableSwordAttackFromAnimation
     data: 
     objectReferenceParameter: {fileID: 0}

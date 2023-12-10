@@ -1,10 +1,14 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SwordAttack : MonoBehaviour
 {
     public int attackDamage = 10; // Damage the sword deals to enemies
     private BoxCollider2D swordCollider;
     public Transform hitboxPivot; // Assign a pivot GameObject to help position the hitbox
+
+    // Add a HashSet to keep track of hit enemies
+    private HashSet<Enemy> hitEnemies = new HashSet<Enemy>();
 
     public Vector2 hitboxSizeRight;
     public Vector2 hitboxSizeLeft;
@@ -25,6 +29,7 @@ public class SwordAttack : MonoBehaviour
     {
         swordCollider.enabled = true; // Enable the collider
         UpdateHitbox(direction); // Update the hitbox size and position based on the direction
+        hitEnemies.Clear(); // Clear the set of hit enemies at the start of each attack
     }
 
     public void DisableAttack()
@@ -64,12 +69,11 @@ public class SwordAttack : MonoBehaviour
         if (collision.CompareTag("Enemy")) // Make sure the enemy has a tag "Enemy"
         {
             Enemy enemy = collision.GetComponent<Enemy>();
-            if (enemy != null)
+            if (enemy != null && !hitEnemies.Contains(enemy))
             {
                 enemy.TakeDamage(attackDamage);
+                hitEnemies.Add(enemy); // Add the enemy to the set of hit enemies
             }
         }
     }
-
-
 }

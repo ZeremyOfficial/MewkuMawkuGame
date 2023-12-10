@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     public float speedBoostFactor = 1.5f;
     private bool isInvincible = false;
     private PlayerMovement playerMovement; // Reference to the PlayerMovement script
+    private Coroutine invincibilityCoroutine;
 
     // Public property to access the invincibility status
     public bool IsInvincible
@@ -20,8 +21,6 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-
-        // Find the PlayerMovement script in the scene
         playerMovement = FindObjectOfType<PlayerMovement>();
 
         if (playerMovement == null)
@@ -35,7 +34,6 @@ public class PlayerHealth : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && !isInvincible)
         {
             PlayerTakeDamage(10); // Apply damage
-            StartCoroutine(BecomeTemporarilyInvincible()); // Start invincibility coroutine
         }
     }
 
@@ -44,13 +42,18 @@ public class PlayerHealth : MonoBehaviour
         if (!isInvincible)
         {
             currentHealth -= damageAmount;
+
             if (currentHealth <= 0)
             {
                 Die();
             }
             else
             {
-                StartCoroutine(BecomeTemporarilyInvincible());
+                if (invincibilityCoroutine != null)
+                {
+                    StopCoroutine(invincibilityCoroutine); // Stop the current running coroutine if any
+                }
+                invincibilityCoroutine = StartCoroutine(BecomeTemporarilyInvincible());
             }
         }
     }
@@ -63,13 +66,38 @@ public class PlayerHealth : MonoBehaviour
 
         yield return new WaitForSeconds(invincibilityDurationSeconds);
 
-        isInvincible = false;
         playerMovement.Speed = originalSpeed; // Reset speed to original
+        isInvincible = false;
     }
 
     private void Die()
     {
         Debug.Log("Player has died.");
-        // Add death handling logic here
+        
+        // Stop enemy spawning
+        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
+        if (spawner != null)
+        {
+            spawner.ToggleSpawning(false);
+        }
+
+        // Destroy the player GameObject
+        Destroy(gameObject);
+
+        // Show the death menu
+        UIManager uiManager = FindObjectOfType<UIManager>();
+        if (uiManager != null)
+        {
+            uiManager.ShowDeathMenu();
+        }
+
+        // Additional death handling logic here
+
+        if (invincibilityCoroutine != null)
+        {
+            StopCoroutine(invincibilityCoroutine); // Ensure no coroutine is left running
+            playerMovement.Speed = playerMovement.originalSpeed; // Reset speed to original if needed
+        }
     }
 }
+	
