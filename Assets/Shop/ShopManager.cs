@@ -23,9 +23,10 @@ public class ShopManager : MonoBehaviour
         UpdateTotalScoreDisplay();
         CheckFireballPurchaseStatus();
         UpdateSpeedUpgradeButton();
-        
-        // Add an onClick event for the "Main Menu" button
+
+        // Add onClick listeners for the buttons
         mainMenuButton.onClick.AddListener(ReturnToMainMenu);
+        resetButton.onClick.AddListener(ResetPurchasesAndUpgrades);
     }
 
     public void CheckFireballPurchaseStatus()
@@ -78,6 +79,7 @@ public class ShopManager : MonoBehaviour
     public void ResetPurchasesAndUpgrades()
     {
         GameManager.instance.ResetPurchasesAndUpgrades();
+        ScoreScript.instance.ResetTotalScore();
         speedUpgradeCost = 250;
         GameManager.instance.UpdateSpeedUpgradeCost(speedUpgradeCost);
         UpdateSpeedUpgradeButton();
@@ -92,7 +94,7 @@ public class ShopManager : MonoBehaviour
 
     public void ReturnToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu"); // Replace "MainMenu" with the actual name of your main menu scene
+        SceneManager.LoadScene("MainMenu");
     }
 
     private IEnumerator UpdateSpeedUpgradeButtonAfterDelay(string message, float delay)

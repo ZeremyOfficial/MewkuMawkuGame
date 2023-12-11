@@ -8,9 +8,10 @@ public class ScoreScript : MonoBehaviour
 
     private int perRunScore;
     private int totalScore;
+    private int highScore;
     private float survivalTime = 0;
     public TextMeshProUGUI perRunScoreText;
-    private bool isInOverworld = false; // Flag to check if in Overworld
+    private bool isInOverworld = false;
 
     void Awake()
     {
@@ -25,6 +26,7 @@ public class ScoreScript : MonoBehaviour
         }
 
         totalScore = PlayerPrefs.GetInt("PlayerScore", 0);
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
@@ -35,7 +37,7 @@ public class ScoreScript : MonoBehaviour
 
     void Update()
     {
-        if (isInOverworld) // Only update if in Overworld
+        if (isInOverworld)
         {
             survivalTime += Time.deltaTime;
             if (survivalTime >= 30f)
@@ -48,7 +50,7 @@ public class ScoreScript : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        isInOverworld = scene.name == "Overworld"; // Set flag based on scene
+        isInOverworld = scene.name == "Overworld";
 
         if (isInOverworld)
         {
@@ -71,10 +73,17 @@ public class ScoreScript : MonoBehaviour
         GameObject deathMenuPanel = GameObject.FindGameObjectWithTag("DeathMenu");
         if (deathMenuPanel != null)
         {
-            TextMeshProUGUI deathMenuTotalScoreText = deathMenuPanel.GetComponentInChildren<TextMeshProUGUI>(true);
-            if (deathMenuTotalScoreText != null)
+            TextMeshProUGUI[] texts = deathMenuPanel.GetComponentsInChildren<TextMeshProUGUI>(true);
+            foreach (var text in texts)
             {
-                deathMenuTotalScoreText.text = "Total Score: " + totalScore;
+                if (text.gameObject.name == "TotalScoreText")
+                {
+                    text.text = "Total Score: " + totalScore;
+                }
+                else if (text.gameObject.name == "HighScoreText")
+                {
+                    text.text = "High Score: " + highScore;
+                }
             }
         }
     }
@@ -99,6 +108,12 @@ public class ScoreScript : MonoBehaviour
 
         totalScore += points;
         SaveTotalScore();
+
+        if (perRunScore > highScore)
+        {
+            highScore = perRunScore;
+            SaveHighScore();
+        }
     }
 
     public void SaveTotalScore()
@@ -110,7 +125,7 @@ public class ScoreScript : MonoBehaviour
     public void LoadTotalScore()
     {
         totalScore = PlayerPrefs.GetInt("PlayerScore", 0);
-        UpdatePerRunScoreText(); // Ensure the UI is updated when the score is loaded
+        UpdatePerRunScoreText();
     }
 
     public void ResetPerRunScore()
@@ -136,7 +151,8 @@ public class ScoreScript : MonoBehaviour
         return totalScore;
     }
 
-    public void ResetScore()
+    // Resets only the total score, not the high score.
+    public void ResetTotalScore()
     {
         totalScore = 0;
         SaveTotalScore();
@@ -145,5 +161,21 @@ public class ScoreScript : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public void SaveHighScore()
+    {
+        PlayerPrefs.SetInt("HighScore", highScore);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadHighScore()
+    {
+        highScore = PlayerPrefs.GetInt("HighScore", 0);
+    }
+
+    public int GetHighScore()
+    {
+        return highScore;
     }
 }

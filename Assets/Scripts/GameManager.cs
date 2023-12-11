@@ -53,14 +53,16 @@ public class GameManager : MonoBehaviour
     {
         fireballUnlocked = false;
         speedUpgradeCount = 0;
+        speedUpgradeCost = 250; // Reset the speed upgrade cost to the initial value
         PlayerPrefs.SetInt("FireballUnlocked", 0);
         PlayerPrefs.SetInt("SpeedUpgradeCount", 0);
-        PlayerPrefs.SetInt("SpeedUpgradeCost", 250);
+        PlayerPrefs.SetInt("SpeedUpgradeCost", speedUpgradeCost);
         PlayerPrefs.Save();
 
+        // Reset the total score in the ScoreScript, not affecting the high score
         if (ScoreScript.instance != null)
         {
-            ScoreScript.instance.ResetScore();
+            ScoreScript.instance.ResetTotalScore();
         }
     }
 }
