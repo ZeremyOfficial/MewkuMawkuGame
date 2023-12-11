@@ -6,12 +6,11 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
     public float invincibilityDurationSeconds = 2f;
-    public float speedBoostFactor = 1.5f;
     private bool isInvincible = false;
-    private PlayerMovement playerMovement; // Reference to the PlayerMovement script
+    private PlayerMovement playerMovement;
+    private UIManager uiManager;
     private Coroutine invincibilityCoroutine;
 
-    // Public property to access the invincibility status
     public bool IsInvincible
     {
         get { return isInvincible; }
@@ -21,11 +20,18 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        playerMovement = FindObjectOfType<PlayerMovement>();
+        // Get the PlayerMovement component from the parent GameObject
+        playerMovement = GetComponentInParent<PlayerMovement>();
+        // Find the UIManager in the scene
+        uiManager = FindObjectOfType<UIManager>();
 
         if (playerMovement == null)
         {
-            Debug.LogError("PlayerMovement script not found in the scene.");
+            Debug.LogError("PlayerMovement script not found on the player.");
+        }
+        if (uiManager == null)
+        {
+            Debug.LogError("UIManager not found in the scene.");
         }
     }
 
@@ -33,7 +39,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && !isInvincible)
         {
-            PlayerTakeDamage(10); // Apply damage
+            PlayerTakeDamage(10);
         }
     }
 
@@ -51,7 +57,7 @@ public class PlayerHealth : MonoBehaviour
             {
                 if (invincibilityCoroutine != null)
                 {
-                    StopCoroutine(invincibilityCoroutine); // Stop the current running coroutine if any
+                    StopCoroutine(invincibilityCoroutine);
                 }
                 invincibilityCoroutine = StartCoroutine(BecomeTemporarilyInvincible());
             }
@@ -61,43 +67,39 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator BecomeTemporarilyInvincible()
     {
         isInvincible = true;
-        float originalSpeed = playerMovement.Speed; // Get the current speed
-        playerMovement.Speed *= speedBoostFactor; // Apply speed boost
-
         yield return new WaitForSeconds(invincibilityDurationSeconds);
-
-        playerMovement.Speed = originalSpeed; // Reset speed to original
         isInvincible = false;
     }
 
     private void Die()
     {
-        Debug.Log("Player has died.");
-        
-        // Stop enemy spawning
-        EnemySpawner spawner = FindObjectOfType<EnemySpawner>();
-        if (spawner != null)
+        DisablePlayerActions();
+        uiManager.ShowDeathMenu();
+        Destroy(playerMovement.gameObject); // Destroy the parent player GameObject
+    }
+
+    private void DisablePlayerActions()
+    {
+        if (playerMovement != null)
         {
-            spawner.ToggleSpawning(false);
+            playerMovement.enabled = false;
+            var swordAttack = playerMovement.GetComponentInChildren<SwordAttack>();
+            if (swordAttack != null)
+            {
+                swordAttack.enabled = false;
+            }
         }
 
-        // Destroy the player GameObject
-        Destroy(gameObject);
-
-        // Show the death menu
-        UIManager uiManager = FindObjectOfType<UIManager>();
-        if (uiManager != null)
+        Renderer[] renderers = playerMovement.GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in renderers)
         {
-            uiManager.ShowDeathMenu();
+            renderer.enabled = false;
         }
 
-        // Additional death handling logic here
-
-        if (invincibilityCoroutine != null)
+        Animator animator = playerMovement.GetComponentInChildren<Animator>();
+        if (animator != null)
         {
-            StopCoroutine(invincibilityCoroutine); // Ensure no coroutine is left running
-            playerMovement.Speed = playerMovement.originalSpeed; // Reset speed to original if needed
+            animator.enabled = false;
         }
     }
 }
-	

@@ -1,83 +1,83 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
 
-public class UIManager : MonoBehaviour
-{
-    public GameObject deathMenuPanel;
-    public TimerScript timerScript; // This should be set if TimerScript is in the same scene as UIManager
-
-    private void Start()
+    public class UIManager : MonoBehaviour
     {
-        // Hide the death menu at the start
-        HideDeathMenu();
+        public GameObject deathMenuPanel;
+        public TimerScript timerScript; // This should be set if TimerScript is in the same scene as UIManager
 
-        // Start the timer if it's in the same scene
-        if (timerScript != null)
+        private void Start()
         {
-            timerScript.StartTimer();
-        }
-    }
+            // Hide the death menu at the start
+            HideDeathMenu();
 
-    public void ShowDeathMenu()
-    {
-        if (deathMenuPanel != null)
-        {
-            deathMenuPanel.SetActive(true);
-            Time.timeScale = 0;
-
-            // Use the instance of ScoreScript to update the total score in the death menu
-            if (ScoreScript.instance != null)
+            // Start the timer if it's in the same scene
+            if (timerScript != null)
             {
-                ScoreScript.instance.ShowTotalScoreInDeathMenu();
+                timerScript.StartTimer();
             }
         }
-        else
-        {
-            Debug.LogError("DeathMenuPanel reference not assigned in the Inspector.");
-        }
-    }
 
-    public void HideDeathMenu()
-    {
-        if (deathMenuPanel != null)
+        public void ShowDeathMenu()
         {
-            deathMenuPanel.SetActive(false);
-            Time.timeScale = 1;
-        }
-        else
-        {
-            Debug.LogWarning("DeathMenuPanel reference not assigned in the Inspector, but trying to hide it.");
-        }
-    }
+            if (deathMenuPanel != null)
+            {
+                deathMenuPanel.SetActive(true);
+                Time.timeScale = 0;
 
-    public void Retry()
-    {
-        // Use the instance of ScoreScript to reset the per-run score
-        if (ScoreScript.instance != null)
-        {
-            ScoreScript.instance.ResetPerRunScore();
+                // Use the instance of ScoreScript to update the total score in the death menu
+                if (ScoreScript.instance != null)
+                {
+                    ScoreScript.instance.ShowTotalScoreInDeathMenu();
+                }
+            }
+            else
+            {
+                Debug.LogError("DeathMenuPanel reference not assigned in the Inspector.");
+            }
         }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-        // Restart the timer if it's in the same scene
-        if (timerScript != null)
+        public void HideDeathMenu()
         {
-            timerScript.StartTimer();
+            if (deathMenuPanel != null)
+            {
+                deathMenuPanel.SetActive(false);
+                Time.timeScale = 1;
+            }
+            else
+            {
+                Debug.LogWarning("DeathMenuPanel reference not assigned in the Inspector, but trying to hide it.");
+            }
         }
 
-        HideDeathMenu();
-    }
+        public void Retry()
+        {
+            // Use the instance of ScoreScript to reset the per-run score
+            if (ScoreScript.instance != null)
+            {
+                ScoreScript.instance.ResetPerRunScore();
+            }
 
-    public void OpenShop()
-    {
-        HideDeathMenu();
-        SceneManager.LoadScene("ShopScene");
-    }
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-    public void BackToMenu()
-    {
-        HideDeathMenu();
-        SceneManager.LoadScene("MainMenu");
+            // Restart the timer if it's in the same scene
+            if (timerScript != null)
+            {
+                timerScript.StartTimer();
+            }
+
+            HideDeathMenu();
+        }
+
+        public void OpenShop()
+        {
+            HideDeathMenu();
+            SceneManager.LoadScene("ShopScene");
+        }
+
+        public void BackToMenu()
+        {
+            HideDeathMenu();
+            SceneManager.LoadScene("MainMenu");
+        }
     }
-}

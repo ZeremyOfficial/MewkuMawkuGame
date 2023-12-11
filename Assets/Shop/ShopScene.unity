@@ -181,7 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Retry
+  m_text: Play
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -554,7 +554,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1413882984}
         m_TargetAssemblyTypeName: ShopManager, Assembly-CSharp
-        m_MethodName: RetryOverworld
+        m_MethodName: LoadOverworldScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1652,12 +1652,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c07748d5cb821b49b8afa2fc11f4332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonText: {fileID: 1640485292}
+  fireballButtonText: {fileID: 1640485292}
+  speedUpgradeButtonText: {fileID: 1329636108}
   totalScoreText: {fileID: 1381944907}
   purchaseButton: {fileID: 1157104621}
   speedUpgradeButton: {fileID: 1232624079}
-  mainMenuButton: {fileID: 0}
-  resetButton: {fileID: 0}
+  mainMenuButton: {fileID: 171052855}
+  resetButton: {fileID: 1026815500}
   fireballCost: 1250
 --- !u!4 &1413882985
 Transform:
