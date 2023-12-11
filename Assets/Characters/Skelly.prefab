@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2612206932968120708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.908, y: -0.365, z: 0.0791014}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -185,6 +185,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   attackDamage: 10
+  deathEffectPrefab: {fileID: 8073987858938450869, guid: 6d9572ffc8ec96949a2dcf052c9ab575, type: 3}
+  particleEffectHolderPrefab: {fileID: 7460147872920578052, guid: 74f5f16e3b905264c9d87db206b0c997, type: 3}
 --- !u!61 &2064055766704947828
 BoxCollider2D:
   m_ObjectHideFlags: 0

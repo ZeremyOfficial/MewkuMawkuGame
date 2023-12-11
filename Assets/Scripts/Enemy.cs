@@ -5,6 +5,8 @@ public class Enemy : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
     public int attackDamage = 10;
+    public GameObject deathEffectPrefab; // Assign this in the inspector
+    public float deathEffectDuration = 2.0f; // Adjust the duration as needed
 
     void Start()
     {
@@ -23,16 +25,25 @@ public class Enemy : MonoBehaviour
 
     private void EnemyDie()
     {
+        // Instantiate the death effect at the enemy's position and rotation
+        if (deathEffectPrefab)
+        {
+            GameObject deathEffect = Instantiate(deathEffectPrefab, transform.position, Quaternion.identity);
+
+            // Destroy the death effect GameObject after the specified duration
+            Destroy(deathEffect, deathEffectDuration);
+        }
+
         if (ScoreScript.instance != null)
         {
-            ScoreScript.instance.AddPoints(10); // Use the singleton instance
+            ScoreScript.instance.AddPoints(10);
         }
         else
         {
             Debug.LogError("ScoreScript instance not found.");
         }
 
-        Destroy(gameObject); // Destroy the enemy object
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
