@@ -72,7 +72,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0032742023, y: -0.036580786}
+  m_Offset: {x: 0.0032742023, y: -0.04863207}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -83,7 +83,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.09284639, y: 0.18097106}
+  m_Size: {x: 0.09016833, y: 0.15686849}
   m_EdgeRadius: 0
 --- !u!95 &2612206932968120706
 Animator:
@@ -186,7 +186,7 @@ MonoBehaviour:
   maxHealth: 1
   attackDamage: 10
   deathEffectPrefab: {fileID: 8073987858938450869, guid: 6d9572ffc8ec96949a2dcf052c9ab575, type: 3}
-  particleEffectHolderPrefab: {fileID: 7460147872920578052, guid: 74f5f16e3b905264c9d87db206b0c997, type: 3}
+  deathEffectDuration: 2
 --- !u!61 &2064055766704947828
 BoxCollider2D:
   m_ObjectHideFlags: 0
