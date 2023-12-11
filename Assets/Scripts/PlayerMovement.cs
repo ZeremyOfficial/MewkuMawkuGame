@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
         set { speed = Mathf.Max(0, value); }
     }
 
+    public AudioSource swordSwingAudio; // Reference to the Audio Source for sword swing sound
+
     void Awake()
     {
         myRB = GetComponent<Rigidbody2D>();
@@ -94,6 +96,12 @@ public class PlayerMovement : MonoBehaviour
             isAttacking = true;
             attackDurationTimer = attackDuration;
             speed *= attackSpeedMultiplier;
+
+            // Play the sword swing sound
+            if (swordSwingAudio != null)
+            {
+                swordSwingAudio.PlayOneShot(swordSwingAudio.clip); // Play the assigned audio clip
+            }
         }
     }
 
