@@ -25,12 +25,18 @@ public class PlayerMovement : MonoBehaviour
         set { speed = Mathf.Max(0, value); }
     }
 
-    void Start()
+    void Awake()
     {
         myRB = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
         originalSpeed = speed;
-        fireballUnlocked = GameManager.instance.fireballUnlocked; // Accessing the GameManager's instance for the fireball unlocked state
+
+        // Apply speed upgrades from GameManager if it exists
+        if (GameManager.instance != null)
+        {
+            ApplySpeedUpgrades(GameManager.instance.speedUpgradeCount);
+            fireballUnlocked = GameManager.instance.fireballUnlocked;
+        }
     }
 
     void Update()
@@ -87,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
             isAttacking = true;
             attackDurationTimer = attackDuration;
-            speed *= attackSpeedMultiplier; 
+            speed *= attackSpeedMultiplier;
         }
     }
 
@@ -128,10 +134,21 @@ public class PlayerMovement : MonoBehaviour
         fireballCooldown = Mathf.Max(0, fireballCooldown - amount);
     }
 
-    // This method should now be called by the GameManager when the fireball is unlocked.
     public void UnlockFireball()
     {
         fireballUnlocked = true;
-        // The save functionality is moved to the GameManager.
+    }
+
+    public void UpgradeSpeed(float increaseAmount)
+    {
+        speed += increaseAmount;
+        originalSpeed = speed;
+    }
+
+    private void ApplySpeedUpgrades(int upgradeCount)
+    {
+        float speedIncreaseAmount = 0.2f; // The amount speed increases per upgrade
+        speed += speedIncreaseAmount * upgradeCount;
+        originalSpeed = speed;
     }
 }

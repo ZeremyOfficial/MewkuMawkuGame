@@ -2,116 +2,114 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class ShopManager : MonoBehaviour
 {
-    public TextMeshProUGUI buttonText;
-    public TextMeshProUGUI totalScoreText; // Add a reference to the Total Score TextMeshProUGUI
+    public TextMeshProUGUI buttonText; // Text for the fireball purchase button
+    public TextMeshProUGUI totalScoreText;
+    public Button purchaseButton; // Fireball purchase button
+    public Button speedUpgradeButton; // Speed upgrade button
+    public Button mainMenuButton; // Main Menu button
+    public Button resetButton; // Reset purchases and upgrades button
 
     public int fireballCost = 1250;
-    
+    private int speedUpgradeCost = 250;
+
+    void Start()
+    {
+        UpdateTotalScoreDisplay();
+        CheckFireballPurchaseStatus();
+        UpdateSpeedUpgradeButton(); // Initialize the speed upgrade button text
+    }
+
+    public void CheckFireballPurchaseStatus()
+    {
+        if (GameManager.instance.fireballUnlocked)
+        {
+            buttonText.text = "Thank you for your patronage";
+            purchaseButton.interactable = false;
+        }
+        else
+        {
+            buttonText.text = "Buy Fireball (Cost: " + fireballCost + ")";
+            purchaseButton.interactable = true;
+        }
+    }
+
     public void ReturnToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu"); // Load the main menu scene by its name
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void RetryOverworld()
     {
-        // Make sure GameManager and ScoreScript instances exist
-        if (GameManager.instance != null && ScoreScript.instance != null)
+        SceneManager.LoadScene("Overworld");
+    }
+
+    public void PurchaseSpeedUpgrade()
+    {
+        // Check if we have enough score to purchase the upgrade
+        if (ScoreScript.instance.GetTotalScore() >= speedUpgradeCost)
         {
-            // Reset the per-run score
-            ScoreScript.instance.ResetPerRunScore();
+            // Spend the score and increase the upgrade count in the GameManager
+            ScoreScript.instance.SpendScore(speedUpgradeCost);
+            GameManager.instance.IncreaseSpeedUpgradeCount(); // Call GameManager to increment the speed upgrade count
 
-            // Set the time scale to 1 (unfreeze the game)
-            Time.timeScale = 1;
-
-            // Get the name of the Overworld scene
-            string overworldSceneName = "Overworld";
-
-            // Check if the Overworld scene is currently loaded
-            if (SceneManager.GetSceneByName(overworldSceneName).isLoaded)
-            {
-                // The Overworld scene is already loaded, so just restart it
-                SceneManager.LoadScene(overworldSceneName);
-            }
-            else
-            {
-                // The Overworld scene is not loaded, so load it
-                SceneManager.LoadScene(overworldSceneName, LoadSceneMode.Single);
-            }
+            // Update the cost for the next upgrade and the UI
+            speedUpgradeCost *= 2;
+            StartCoroutine(UpdateSpeedUpgradeButtonAfterDelay("Speed Up!", 1f)); // Show "Speed Up!" for 1 second
+            UpdateTotalScoreDisplay();
         }
         else
         {
-            // Handle the case where instances are not initialized
-            Debug.LogError("ScoreScript or GameManager is not initialized!");
+            StartCoroutine(ShowNotEnoughScoreMessage());
         }
     }
 
-
-    // Ensure that the GameManager and ScoreScript instances are initialized
-    private void Awake()
+    public void ResetPurchasesAndUpgrades()
     {
-        // Make sure GameManager exists and is initialized
-        if (GameManager.instance == null)
-        {
-            // Handle the absence of GameManager here, e.g., load it from a prefab
-            Debug.LogError("GameManager is missing or not initialized!");
-        }
+        GameManager.instance.ResetPurchasesAndUpgrades(); // Reset the upgrades in GameManager
+        speedUpgradeCost = 250; // Reset speed upgrade cost
+        UpdateSpeedUpgradeButton(); // Update the speed upgrade button text
+        CheckFireballPurchaseStatus(); // Update the fireball purchase button
+        UpdateTotalScoreDisplay(); // Update the total score display
+    }
 
-        // Make sure ScoreScript exists and is initialized
-        if (ScoreScript.instance == null)
+    private IEnumerator UpdateSpeedUpgradeButtonAfterDelay(string message, float delay)
+    {
+        UpdateSpeedUpgradeButtonText(message);
+        yield return new WaitForSeconds(delay);
+        UpdateSpeedUpgradeButtonText("Upgrade Speed (Cost: " + speedUpgradeCost + ")");
+    }
+
+    private void UpdateSpeedUpgradeButtonText(string text)
+    {
+        TextMeshProUGUI speedUpgradeText = speedUpgradeButton.GetComponentInChildren<TextMeshProUGUI>();
+        if (speedUpgradeText != null)
         {
-            // Handle the absence of ScoreScript here, e.g., load it from a prefab
-            Debug.LogError("ScoreScript is missing or not initialized!");
+            speedUpgradeText.text = text;
         }
     }
 
-    // Update the Total Score display
-    private void UpdateTotalScoreDisplay()
+    private void UpdateSpeedUpgradeButton()
     {
-        if (totalScoreText != null && ScoreScript.instance != null)
-        {
-            totalScoreText.text = "Total Score: " + ScoreScript.instance.GetTotalScore();
-        }
-    }
-
-    private void Start()
-    {
-        // Update the Total Score display when the shop scene starts
-        UpdateTotalScoreDisplay();
-    }
-
-    public void PurchaseFireball()
-    {
-        if (ScoreScript.instance != null && GameManager.instance != null)
-        {
-            if (ScoreScript.instance.GetTotalScore() >= fireballCost)
-            {
-                ScoreScript.instance.SpendScore(fireballCost);
-                GameManager.instance.UnlockFireball();
-                buttonText.text = "Thank you for your patronage";
-
-                // Update the Total Score display after the purchase
-                UpdateTotalScoreDisplay();
-            }
-            else
-            {
-                StartCoroutine(ShowNotEnoughScoreMessage());
-            }
-        }
-        else
-        {
-            // Handle the case where instances are not initialized
-            Debug.LogError("ScoreScript or GameManager is not initialized!");
-        }
+        UpdateSpeedUpgradeButtonText("Upgrade Speed (Cost: " + speedUpgradeCost + ")");
     }
 
     private IEnumerator ShowNotEnoughScoreMessage()
     {
         string originalText = buttonText.text;
         buttonText.text = "Not enough score";
-        yield return new WaitForSeconds(2); // Wait for 2 seconds
+        yield return new WaitForSeconds(2);
         buttonText.text = originalText;
+    }
+
+    private void UpdateTotalScoreDisplay()
+    {
+        if (totalScoreText != null && ScoreScript.instance != null)
+        {
+            totalScoreText.text = "Total Score: " + ScoreScript.instance.GetTotalScore();
+        }
     }
 }

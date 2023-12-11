@@ -130,6 +130,12 @@ public class ScoreScript : MonoBehaviour
         return totalScore;
     }
 
+    public void ResetScore()
+    {
+        totalScore = 0;
+        SaveTotalScore();
+    }
+
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
