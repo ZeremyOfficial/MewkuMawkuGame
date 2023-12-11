@@ -10,6 +10,7 @@ public class ScoreScript : MonoBehaviour
     private int totalScore;
     private float survivalTime = 0;
     public TextMeshProUGUI perRunScoreText;
+    private bool isInOverworld = false; // Flag to check if in Overworld
 
     void Awake()
     {
@@ -34,17 +35,22 @@ public class ScoreScript : MonoBehaviour
 
     void Update()
     {
-        survivalTime += Time.deltaTime;
-        if (survivalTime >= 30f)
+        if (isInOverworld) // Only update if in Overworld
         {
-            AddPoints(25);
-            survivalTime = 0f;
+            survivalTime += Time.deltaTime;
+            if (survivalTime >= 30f)
+            {
+                AddPoints(25);
+                survivalTime = 0f;
+            }
         }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "Overworld")
+        isInOverworld = scene.name == "Overworld"; // Set flag based on scene
+
+        if (isInOverworld)
         {
             GameObject runScoreObj = GameObject.FindGameObjectWithTag("RunScore");
             if (runScoreObj != null)

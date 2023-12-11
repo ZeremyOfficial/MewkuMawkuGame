@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections; // Add this line
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class PlayerHealth : MonoBehaviour
     private PlayerMovement playerMovement;
     private UIManager uiManager;
     private Coroutine invincibilityCoroutine;
+    private TimerScript timerScript; // Reference to the TimerScript
 
     public bool IsInvincible
     {
@@ -20,10 +21,9 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        // Get the PlayerMovement component from the parent GameObject
         playerMovement = GetComponentInParent<PlayerMovement>();
-        // Find the UIManager in the scene
         uiManager = FindObjectOfType<UIManager>();
+        timerScript = FindObjectOfType<TimerScript>(); // Find the TimerScript in the scene
 
         if (playerMovement == null)
         {
@@ -32,6 +32,10 @@ public class PlayerHealth : MonoBehaviour
         if (uiManager == null)
         {
             Debug.LogError("UIManager not found in the scene.");
+        }
+        if (timerScript == null)
+        {
+            Debug.LogError("TimerScript not found in the scene.");
         }
     }
 
@@ -73,6 +77,12 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
+        // Stop the timer when the player dies
+        if (timerScript != null)
+        {
+            timerScript.StopTimer();
+        }
+
         DisablePlayerActions();
         uiManager.ShowDeathMenu();
         Destroy(playerMovement.gameObject); // Destroy the parent player GameObject
