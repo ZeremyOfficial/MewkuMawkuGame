@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
 
     public bool fireballUnlocked;
-    public int speedUpgradeCount; // Track speed upgrades
+    public int speedUpgradeCount;
+    public int speedUpgradeCost;
 
     void Awake()
     {
@@ -18,12 +19,12 @@ public class GameManager : MonoBehaviour
         else if (instance != this)
         {
             Destroy(gameObject);
-            return; // Exit the method to prevent further execution
+            return;
         }
 
-        // Initialize unlocked states and upgrade counts based on PlayerPrefs
         fireballUnlocked = PlayerPrefs.GetInt("FireballUnlocked", 0) == 1;
-        speedUpgradeCount = PlayerPrefs.GetInt("SpeedUpgradeCount", 0); // Load the speed upgrade count
+        speedUpgradeCount = PlayerPrefs.GetInt("SpeedUpgradeCount", 0);
+        speedUpgradeCost = PlayerPrefs.GetInt("SpeedUpgradeCost", 250);
     }
 
     public void UnlockFireball()
@@ -31,8 +32,6 @@ public class GameManager : MonoBehaviour
         fireballUnlocked = true;
         PlayerPrefs.SetInt("FireballUnlocked", 1);
         PlayerPrefs.Save();
-
-        // Load the shop scene after unlocking the fireball
         SceneManager.LoadScene("ShopScene");
     }
 
@@ -43,33 +42,22 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
-    public bool FireballUnlocked()
+    public void UpdateSpeedUpgradeCost(int newCost)
     {
-        return fireballUnlocked;
+        speedUpgradeCost = newCost;
+        PlayerPrefs.SetInt("SpeedUpgradeCost", speedUpgradeCost);
+        PlayerPrefs.Save();
     }
 
-    public void ApplySpeedUpgradesToPlayer(PlayerMovement playerMovement)
-    {
-        // This method assumes that the PlayerMovement script has a method
-        // called UpgradeSpeed that takes a float parameter for the speed increase.
-        // The PlayerMovement script must be in the active scene for this to work.
-        float speedIncreaseAmount = 0.2f; // The amount speed increases per upgrade
-        if (playerMovement != null)
-        {
-            playerMovement.UpgradeSpeed(speedIncreaseAmount * speedUpgradeCount);
-        }
-    }
-
-    // Resets the purchases, upgrades, and score to their original values
     public void ResetPurchasesAndUpgrades()
     {
         fireballUnlocked = false;
         speedUpgradeCount = 0;
         PlayerPrefs.SetInt("FireballUnlocked", 0);
         PlayerPrefs.SetInt("SpeedUpgradeCount", 0);
+        PlayerPrefs.SetInt("SpeedUpgradeCost", 250);
         PlayerPrefs.Save();
 
-        // Reset the score through the ScoreScript
         if (ScoreScript.instance != null)
         {
             ScoreScript.instance.ResetScore();

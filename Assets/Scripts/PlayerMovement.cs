@@ -155,7 +155,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void ApplySpeedUpgrades(int upgradeCount)
     {
-        float speedIncreaseAmount = 0.2f; // The amount speed increases per upgrade
+        float speedIncreaseAmount = 0.05f; // The amount speed increases per upgrade
         speed += speedIncreaseAmount * upgradeCount;
         originalSpeed = speed;
     }

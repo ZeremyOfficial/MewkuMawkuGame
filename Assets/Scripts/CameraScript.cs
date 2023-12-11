@@ -9,22 +9,19 @@ public class CameraScript : MonoBehaviour
     public Vector2 minPosition;
     public Vector2 maxPosition;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
+    // LateUpdate is called once per frame, after Update
     void LateUpdate()
     {
-        if (transform.position != target.position)
+        if (target != null) // Check if the target transform is not null
         {
-            Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
-            targetPosition.x = Mathf.Clamp(targetPosition.x, minPosition.x, maxPosition.x);
-            targetPosition.y = Mathf.Clamp(targetPosition.y, minPosition.y, maxPosition.y);
+            if (transform.position != target.position)
+            {
+                Vector3 targetPosition = new Vector3(target.position.x, target.position.y, transform.position.z);
+                targetPosition.x = Mathf.Clamp(targetPosition.x, minPosition.x, maxPosition.x);
+                targetPosition.y = Mathf.Clamp(targetPosition.y, minPosition.y, maxPosition.y);
 
-            transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing);
+                transform.position = Vector3.Lerp(transform.position, targetPosition, smoothing);
+            }
         }
     }
 }
