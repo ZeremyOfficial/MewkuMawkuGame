@@ -1,47 +1,83 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public GameObject deathMenuPanel;
-    public TextMeshProUGUI totalScoreText; // Reference to the TextMeshProUGUI that will display the total score in the death menu
-    public ScoreScript scoreScript;
+    public TimerScript timerScript; // This should be set if TimerScript is in the same scene as UIManager
+
+    private void Start()
+    {
+        // Hide the death menu at the start
+        HideDeathMenu();
+
+        // Start the timer if it's in the same scene
+        if (timerScript != null)
+        {
+            timerScript.StartTimer();
+        }
+    }
 
     public void ShowDeathMenu()
     {
-        deathMenuPanel.SetActive(true);
-        Time.timeScale = 0; // Freeze the game
-
-        // Display the total accumulated score on the death menu
-        if (totalScoreText != null && scoreScript != null)
+        if (deathMenuPanel != null)
         {
-            totalScoreText.text = "Total Score: " + scoreScript.GetTotalScore();
+            deathMenuPanel.SetActive(true);
+            Time.timeScale = 0;
+
+            // Use the instance of ScoreScript to update the total score in the death menu
+            if (ScoreScript.instance != null)
+            {
+                ScoreScript.instance.ShowTotalScoreInDeathMenu();
+            }
+        }
+        else
+        {
+            Debug.LogError("DeathMenuPanel reference not assigned in the Inspector.");
+        }
+    }
+
+    public void HideDeathMenu()
+    {
+        if (deathMenuPanel != null)
+        {
+            deathMenuPanel.SetActive(false);
+            Time.timeScale = 1;
+        }
+        else
+        {
+            Debug.LogWarning("DeathMenuPanel reference not assigned in the Inspector, but trying to hide it.");
         }
     }
 
     public void Retry()
     {
-        Time.timeScale = 1; // Unfreeze the game
-
-        if (scoreScript != null)
+        // Use the instance of ScoreScript to reset the per-run score
+        if (ScoreScript.instance != null)
         {
-            scoreScript.ResetPerRunScore(); // Reset the per-run score
+            ScoreScript.instance.ResetPerRunScore();
         }
 
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name); // Reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        // Restart the timer if it's in the same scene
+        if (timerScript != null)
+        {
+            timerScript.StartTimer();
+        }
+
+        HideDeathMenu();
     }
 
     public void OpenShop()
     {
-        // Logic to open the shop panel
+        HideDeathMenu();
+        SceneManager.LoadScene("ShopScene");
     }
 
     public void BackToMenu()
     {
-        Time.timeScale = 1; // Unfreeze the game
-        SceneManager.LoadScene("MainMenu"); // Load the main menu scene
+        HideDeathMenu();
+        SceneManager.LoadScene("MainMenu");
     }
-
-    // Additional methods as needed
 }

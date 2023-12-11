@@ -1,29 +1,39 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class ScoreScript : MonoBehaviour
 {
-    private int perRunScore; // Score for the current run
-    private int totalScore; // Total accumulated score
-    private float survivalTime = 0; // Initialize survivalTime to zero
-    public TextMeshProUGUI perRunScoreText; // Reference to the per-run score text
-    public TextMeshProUGUI totalScoreText; // Reference to the total score text
+    public static ScoreScript instance;
+
+    private int perRunScore;
+    private int totalScore;
+    private float survivalTime = 0;
+    public TextMeshProUGUI perRunScoreText;
 
     void Awake()
     {
-        // Load the total accumulated score from PlayerPrefs at the very start
-        LoadTotalScore();
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+        totalScore = PlayerPrefs.GetInt("PlayerScore", 0);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     void Start()
     {
-        // Reset the per-run score to 0 every time a new game starts
         ResetPerRunScore();
     }
 
     void Update()
     {
-        // Regularly update the per-run score during the game
         survivalTime += Time.deltaTime;
         if (survivalTime >= 30f)
         {
@@ -32,67 +42,84 @@ public class ScoreScript : MonoBehaviour
         }
     }
 
-    private void UpdatePerRunScoreText()
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Update the displayed per-run score text during the game
-        if (perRunScoreText != null)
-            perRunScoreText.text = "Score: " + perRunScore;
+        if (scene.name == "Overworld")
+        {
+            GameObject runScoreObj = GameObject.FindGameObjectWithTag("RunScore");
+            if (runScoreObj != null)
+            {
+                perRunScoreText = runScoreObj.GetComponent<TextMeshProUGUI>();
+                UpdatePerRunScoreText();
+            }
+            ResetPerRunScore();
+        }
+        else
+        {
+            perRunScoreText = null;
+        }
     }
 
-    private void UpdateTotalScoreText()
+    public void ShowTotalScoreInDeathMenu()
     {
-        // Update the displayed total score text with the loaded score
-        if (totalScoreText != null)
-            totalScoreText.text = "Total Score: " + totalScore;
+        GameObject deathMenuPanel = GameObject.FindGameObjectWithTag("DeathMenu");
+        if (deathMenuPanel != null)
+        {
+            TextMeshProUGUI deathMenuTotalScoreText = deathMenuPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (deathMenuTotalScoreText != null)
+            {
+                deathMenuTotalScoreText.text = "Total Score: " + totalScore;
+            }
+        }
+    }
+
+    public void RetryButtonPressed()
+    {
+        ResetPerRunScore();
+    }
+
+    private void UpdatePerRunScoreText()
+    {
+        if (perRunScoreText != null)
+        {
+            perRunScoreText.text = "Score: " + perRunScore;
+        }
     }
 
     public void AddPoints(int points)
     {
-        // Increase the per-run score
         perRunScore += points;
         UpdatePerRunScoreText();
 
-        // Update the total score immediately
         totalScore += points;
-        UpdateTotalScoreText();
-
-        // Save the updated total score
         SaveTotalScore();
     }
 
     public void SaveTotalScore()
     {
-        // Save the total accumulated score to PlayerPrefs
         PlayerPrefs.SetInt("PlayerScore", totalScore);
         PlayerPrefs.Save();
     }
 
     public void LoadTotalScore()
     {
-        // Load the total accumulated score from PlayerPrefs
         totalScore = PlayerPrefs.GetInt("PlayerScore", 0);
-        UpdateTotalScoreText();
+        UpdatePerRunScoreText(); // Ensure the UI is updated when the score is loaded
     }
 
     public void ResetPerRunScore()
     {
-        // Reset the per-run score to zero
         perRunScore = 0;
-        survivalTime = 0; // Also reset survival time to avoid immediate point increase
+        survivalTime = 0;
         UpdatePerRunScoreText();
     }
 
     public bool SpendScore(int amount)
     {
-        // Deduct the spent amount from the total score and save it
-        int currentTotalScore = totalScore;
-        if (currentTotalScore >= amount)
+        if (totalScore >= amount)
         {
-            PlayerPrefs.SetInt("PlayerScore", currentTotalScore - amount);
-            PlayerPrefs.Save();
-
-            // Update the displayed total score text
-            LoadTotalScore();
+            totalScore -= amount;
+            SaveTotalScore();
             return true;
         }
         return false;
@@ -101,5 +128,10 @@ public class ScoreScript : MonoBehaviour
     public int GetTotalScore()
     {
         return totalScore;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 }

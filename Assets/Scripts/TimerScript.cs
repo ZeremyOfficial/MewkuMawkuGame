@@ -1,36 +1,50 @@
 using UnityEngine;
-using TMPro; // Use the TextMesh Pro namespace
+using TMPro;
 
 public class TimerScript : MonoBehaviour
 {
-    private float survivalTime = 0f; // The player's survival time in seconds
-    public TextMeshProUGUI timerText; // Reference to the Timer TMP UI Text
+    private float survivalTime = 0f;
+    public TextMeshProUGUI timerText;
+    private bool isTimerActive = false;
+
+    void Start()
+    {
+        UpdateTimerDisplay(); // Initialize the timer display on start
+    }
 
     void Update()
     {
-        // Increment the survival time
-        survivalTime += Time.deltaTime;
-
-        // Update the UI text with the survival time
-        UpdateTimerText();
-    }
-
-    void UpdateTimerText()
-    {
-        if (timerText != null) // Check if the TMP text component is assigned
+        if (isTimerActive)
         {
-            int minutes = Mathf.FloorToInt(survivalTime / 60f);
-            int seconds = Mathf.FloorToInt(survivalTime % 60f);
-            string timerString = string.Format("{0:0}:{1:00}", minutes, seconds);
-
-            // Update the TMP UI text
-            timerText.text = "Time: " + timerString;
+            survivalTime += Time.deltaTime;
+            UpdateTimerDisplay();
         }
     }
 
-    public void ResetTimer()
+    public void StartTimer()
     {
-        survivalTime = 0f; // Reset the survival time
-        UpdateTimerText(); // Update the timer display
+        isTimerActive = true;
+        survivalTime = 0f;
+        UpdateTimerDisplay();
+    }
+
+    public void StopTimer()
+    {
+        isTimerActive = false;
+    }
+
+    private void UpdateTimerDisplay()
+    {
+        if (timerText != null)
+        {
+            timerText.text = FormatTime(survivalTime);
+        }
+    }
+
+    private string FormatTime(float time)
+    {
+        int minutes = (int)(time / 60);
+        int seconds = (int)(time % 60);
+        return string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 }

@@ -9,10 +9,13 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Main Menu/Mainmenu.unity
+    path: Assets/Main Menu/MainMenu.unity
     guid: 2b8279f89a6f29044819805a80efe49b
   - enabled: 1
     path: Assets/Materials/Scene/Overworld.unity
     guid: aed6a68b2c377fa43bb56347d75b657b
+  - enabled: 1
+    path: Assets/Shop/ShopScene.unity
+    guid: 8b5f486b7510f4746a83cac0afb1fe56
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: c60b7fffb481c4445bafce1469b41c56, type: 2}

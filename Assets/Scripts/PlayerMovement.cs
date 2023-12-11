@@ -11,19 +11,18 @@ public class PlayerMovement : MonoBehaviour
     public float originalSpeed;
 
     public GameObject fireballPrefab;
-    public bool fireballUnlocked = false; // Set this to false initially if the fireball needs to be unlocked in-game
+    public bool fireballUnlocked;
     public float fireballCooldown = 2f;
     private float fireballCooldownTimer = 0f;
     public PlayerSwordController swordController;
 
     [SerializeField]
-    private float speed = 1f; // The default speed of your player
+    private float speed = 1f;
 
-    // Public properties to get and set the speed safely
     public float Speed
     {
         get { return speed; }
-        set { speed = value; }
+        set { speed = Mathf.Max(0, value); }
     }
 
     void Start()
@@ -31,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
         myRB = GetComponent<Rigidbody2D>();
         myAnim = GetComponent<Animator>();
         originalSpeed = speed;
+        fireballUnlocked = GameManager.instance.fireballUnlocked; // Accessing the GameManager's instance for the fireball unlocked state
     }
 
     void Update()
@@ -52,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isAttacking = false;
             speed = originalSpeed;
-            swordController.DisableSwordAttack(); // Make sure to disable the sword hitbox after attacking
+            swordController.DisableSwordAttack();
         }
     }
 
@@ -78,22 +78,11 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && !isAttacking)
         {
             Vector2 attackDirection = GetAttackDirection();
-            string direction;
+            string direction = Mathf.Abs(attackDirection.x) > Mathf.Abs(attackDirection.y) ?
+                               (attackDirection.x > 0 ? "Right" : "Left") :
+                               (attackDirection.y > 0 ? "Up" : "Down");
 
-            // Determine the direction of the attack and play the corresponding animation
-            if (Mathf.Abs(attackDirection.x) > Mathf.Abs(attackDirection.y))
-            {
-                direction = attackDirection.x > 0 ? "Right" : "Left";
-            }
-            else
-            {
-                direction = attackDirection.y > 0 ? "Up" : "Down";
-            }
-
-            // Play the attack animation based on direction
             myAnim.Play("Attack" + direction, -1, 0f);
-
-            // Enable the sword attack with the direction
             swordController.EnableSwordAttack(direction);
 
             isAttacking = true;
@@ -137,5 +126,12 @@ public class PlayerMovement : MonoBehaviour
     public void UpgradeFireballCooldown(float amount)
     {
         fireballCooldown = Mathf.Max(0, fireballCooldown - amount);
+    }
+
+    // This method should now be called by the GameManager when the fireball is unlocked.
+    public void UnlockFireball()
+    {
+        fireballUnlocked = true;
+        // The save functionality is moved to the GameManager.
     }
 }

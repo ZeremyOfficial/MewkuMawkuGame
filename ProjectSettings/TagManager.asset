@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - PlayerHitbox
+  - RunScore
+  - TotalScore
+  - DeathMenu
   layers:
   - Default
   - TransparentFX
