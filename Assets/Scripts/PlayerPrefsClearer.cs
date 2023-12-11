@@ -13,10 +13,11 @@ public static class PlayerPrefsClearer
     [MenuItem("Tools/Clear PlayerPrefs")]
     private static void ClearPlayerPrefs()
     {
-        // Clear PlayerPrefs.
-        PlayerPrefs.DeleteAll();
+        // Clear PlayerPrefs, including the high score key
+        PlayerPrefs.DeleteKey("HighScore"); // Clear the high score key
+        PlayerPrefs.DeleteAll(); // This clears all other PlayerPrefs data
         PlayerPrefs.Save();
 
-        Debug.Log("PlayerPrefs have been cleared.");
+        Debug.Log("PlayerPrefs have been cleared, including the high score.");
     }
 }
