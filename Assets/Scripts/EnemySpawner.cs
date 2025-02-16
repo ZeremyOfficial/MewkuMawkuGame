@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab; // Skelly prefab
-    public float spawnInterval = 5f; // Time interval between spawns
+    public GameObject enemyPrefab; 
+    public float spawnInterval = 5f; // Time interval between enemy spawns
     private float timer = 0f;
 
     public int initialEnemyCount = 1; // Initial number of enemies to spawn
@@ -16,16 +16,16 @@ public class EnemySpawner : MonoBehaviour
     public float maxMoveSpeed = 5.0f; // Maximum movement speed for enemies
     private float currentMoveSpeed; // Current movement speed for spawned enemies
 
-    // Camera boundary limits for 2D
+    
     public float minX;
     public float maxX;
     public float minY;
     public float maxY;
 
-    // Additional variables for validity check
-    public float spawnRadius = 1.0f; // Radius to check for spawn validity
+    
+    public float spawnRadius = 1.0f; 
 
-    private bool canSpawn = true; // Control flag for spawning new enemies
+    private bool canSpawn = true; 
 
     void Start()
     {
@@ -66,7 +66,7 @@ public class EnemySpawner : MonoBehaviour
     {
         float x = Random.Range(minX, maxX);
         float y = Random.Range(minY, maxY);
-        return new Vector3(x, y, 0); // Assuming Z is 0 for a 2D game
+        return new Vector3(x, y, 0); 
     }
 
     bool IsValidSpawnPosition(Vector3 position)
@@ -84,8 +84,7 @@ public class EnemySpawner : MonoBehaviour
     {
         currentMoveSpeed = Mathf.Min(maxMoveSpeed, currentMoveSpeed * moveSpeedIncreaseRate);
     }
-
-    // Public method to control the spawning process
+    
     public void ToggleSpawning(bool status)
     {
         canSpawn = status;

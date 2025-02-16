@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
         set { speed = Mathf.Max(0, value); }
     }
 
-    public AudioSource swordSwingAudio; // Reference to the Audio Source for sword swing sound
+    public AudioSource swordSwingAudio; 
 
     void Awake()
     {
@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         myAnim = GetComponent<Animator>();
         originalSpeed = speed;
 
-        // Apply speed upgrades from GameManager if it exists
+       
         if (GameManager.instance != null)
         {
             ApplySpeedUpgrades(GameManager.instance.speedUpgradeCount);
@@ -97,10 +97,10 @@ public class PlayerMovement : MonoBehaviour
             attackDurationTimer = attackDuration;
             speed *= attackSpeedMultiplier;
 
-            // Play the sword swing sound
+          
             if (swordSwingAudio != null)
             {
-                swordSwingAudio.PlayOneShot(swordSwingAudio.clip); // Play the assigned audio clip
+                swordSwingAudio.PlayOneShot(swordSwingAudio.clip); 
             }
         }
     }

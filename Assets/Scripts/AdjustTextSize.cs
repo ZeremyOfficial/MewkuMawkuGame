@@ -29,7 +29,7 @@ public class AdjustTextSize : MonoBehaviour
 
         if (textWidth > backgroundWidth)
         {
-            // If text width is greater than background width, scale down the font size
+            // If text width exceeds background width, scale down the font size
             while (textWidth > backgroundWidth && textMeshPro.fontSize > textMeshPro.fontSizeMin)
             {
                 textMeshPro.fontSize--;
@@ -38,13 +38,13 @@ public class AdjustTextSize : MonoBehaviour
         }
         else
         {
-            // If text width is less than background width, optionally scale up font size
+            // If text width is less than background width, scale up the font size
             while (textWidth < backgroundWidth && textMeshPro.fontSize < textMeshPro.fontSizeMax)
             {
                 textMeshPro.fontSize++;
                 textWidth = textMeshPro.GetPreferredValues().x;
 
-                // Once it's too wide, break the loop
+                // If text width exceeds background width, scale down the font size
                 if (textWidth > backgroundWidth)
                 {
                     textMeshPro.fontSize--;

@@ -10,17 +10,17 @@ public class Fireball : MonoBehaviour
 
     void Start()
     {
-        startPosition = transform.position; // Record the starting position
+        startPosition = transform.position;
     }
 
     void Update()
     {
         transform.Translate(Vector2.up * speed * Time.deltaTime);
 
-        // Check if the fireball has exceeded its maximum range
+
         if (Vector2.Distance(startPosition, transform.position) > maxRange)
         {
-            Destroy(gameObject); // Destroy the fireball
+            Destroy(gameObject); 
         }
     }
 
@@ -34,12 +34,12 @@ public class Fireball : MonoBehaviour
                 enemyScript.TakeDamage(damage);
             }
 
-            Destroy(gameObject); // Destroy the fireball after it hits an enemy
+            Destroy(gameObject); 
         }
         else if (other.gameObject.CompareTag("Obstacle"))
         {
-            Destroy(gameObject); // Destroy the fireball if it hits an obstacle
+            Destroy(gameObject); 
         }
-        // Additional collision handling as necessary
+
     }
 }

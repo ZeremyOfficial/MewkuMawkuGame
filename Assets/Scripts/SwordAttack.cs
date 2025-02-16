@@ -5,9 +5,9 @@ public class SwordAttack : MonoBehaviour
 {
     public int attackDamage = 10; // Damage the sword deals to enemies
     private BoxCollider2D swordCollider;
-    public Transform hitboxPivot; // Assign a pivot GameObject to help position the hitbox
+    public Transform hitboxPivot;
 
-    // Add a HashSet to keep track of hit enemies
+ 
     private HashSet<Enemy> hitEnemies = new HashSet<Enemy>();
 
     public Vector2 hitboxSizeRight;
@@ -27,19 +27,19 @@ public class SwordAttack : MonoBehaviour
 
     public void EnableAttack(string direction)
     {
-        swordCollider.enabled = true; // Enable the collider
-        UpdateHitbox(direction); // Update the hitbox size and position based on the direction
-        hitEnemies.Clear(); // Clear the set of hit enemies at the start of each attack
+        swordCollider.enabled = true; 
+        UpdateHitbox(direction); 
+        hitEnemies.Clear(); 
     }
 
     public void DisableAttack()
     {
-        swordCollider.enabled = false; // Disable the collider
+        swordCollider.enabled = false;
     }
 
     private void UpdateHitbox(string direction)
     {
-        // Assuming hitboxPivot is at the correct position where you want the center of your hitbox to be
+       
         switch (direction)
         {
             case "Right":
@@ -66,13 +66,13 @@ public class SwordAttack : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy")) // Make sure the enemy has a tag "Enemy"
+        if (collision.CompareTag("Enemy"))
         {
             Enemy enemy = collision.GetComponent<Enemy>();
             if (enemy != null && !hitEnemies.Contains(enemy))
             {
                 enemy.TakeDamage(attackDamage);
-                hitEnemies.Add(enemy); // Add the enemy to the set of hit enemies
+                hitEnemies.Add(enemy); 
             }
         }
     }

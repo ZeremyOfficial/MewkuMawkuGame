@@ -10,7 +10,7 @@ public class PlayerHealth : MonoBehaviour
     private PlayerMovement playerMovement;
     private UIManager uiManager;
     private Coroutine invincibilityCoroutine;
-    private TimerScript timerScript; // Reference to the TimerScript
+    private TimerScript timerScript;
 
     public bool IsInvincible
     {
@@ -23,7 +23,7 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = maxHealth;
         playerMovement = GetComponentInParent<PlayerMovement>();
         uiManager = FindObjectOfType<UIManager>();
-        timerScript = FindObjectOfType<TimerScript>(); // Find the TimerScript in the scene
+        timerScript = FindObjectOfType<TimerScript>(); 
 
         if (playerMovement == null)
         {
@@ -77,7 +77,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        // Stop the timer when the player dies
+        
         if (timerScript != null)
         {
             timerScript.StopTimer();
@@ -85,7 +85,7 @@ public class PlayerHealth : MonoBehaviour
 
         DisablePlayerActions();
         uiManager.ShowDeathMenu();
-        Destroy(playerMovement.gameObject); // Destroy the parent player GameObject
+        Destroy(playerMovement.gameObject); 
     }
 
     private void DisablePlayerActions()

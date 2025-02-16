@@ -9,7 +9,7 @@ public class TimerScript : MonoBehaviour
 
     void Start()
     {
-        UpdateTimerDisplay(); // Initialize the timer display on start
+        UpdateTimerDisplay(); 
     }
 
     void Update()

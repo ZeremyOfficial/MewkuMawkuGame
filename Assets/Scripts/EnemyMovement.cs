@@ -2,18 +2,18 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public float moveSpeed = 3.0f; // Speed at which the enemy moves
-    private Transform player; // Player's transform
+    public float moveSpeed = 3.0f;
+    private Transform player; 
 
     private void Start()
     {
-        // Find the player in the scene and set it
+        // Find the player object
         player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     private void Update()
     {
-        // Move towards the player if the player has been found
+        // If the player is not null, move towards them
         if (player != null)
         {
             MoveTowardsPlayer();
@@ -22,12 +22,12 @@ public class EnemyMovement : MonoBehaviour
 
     private void MoveTowardsPlayer()
     {
-        // Calculate the direction to the player and move towards them
+        // Calculate the direction to the player
         Vector3 direction = (player.position - transform.position).normalized;
         transform.position = Vector3.MoveTowards(transform.position, player.position, moveSpeed * Time.deltaTime);
     }
 
-    // Method to set the enemy's move speed
+    // Method to set the move speed of the enemy
     public void SetMoveSpeed(float newSpeed)
     {
         moveSpeed = newSpeed;
